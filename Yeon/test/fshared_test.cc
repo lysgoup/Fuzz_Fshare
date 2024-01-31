@@ -26,6 +26,8 @@ TEST(DIR_CHECK_TEST, DIR_CHECK_TEST)
     EXPECT_EQ(0, directory_check(input));
 }
 
+TEST()
+
 int main(int argc, char **argv){
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

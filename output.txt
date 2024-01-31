@@ -1,0 +1,22 @@
+[==========] Running 1 test from 1 test case.
+[----------] Global test environment set-up.
+[----------] 1 test from DIR_CHECK_TEST
+[ RUN      ] DIR_CHECK_TEST.DIR_CHECK_TEST
+test_dir/home/s22100141/study_2024/Fuzz_Fshare/test/fshared_test.cc:32: Failure
+      Expected: 0
+To be equal to: directory_check(input2)
+      Which is: 1
+/home/s22100141/study_2024/Fuzz_Fshare/test/fshared_test.cc:33: Failure
+      Expected: 0
+To be equal to: directory_check(input3)
+      Which is: 1
+[  FAILED  ] DIR_CHECK_TEST.DIR_CHECK_TEST (0 ms)
+[----------] 1 test from DIR_CHECK_TEST (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test case ran. (0 ms total)
+[  PASSED  ] 0 tests.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] DIR_CHECK_TEST.DIR_CHECK_TEST
+
+ 1 FAILED TEST

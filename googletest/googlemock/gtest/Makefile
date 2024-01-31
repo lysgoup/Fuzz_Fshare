@@ -99,17 +99,6 @@ install/local/fast: preinstall/fast
 	/usr/local/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local/fast
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/local/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
@@ -131,6 +120,17 @@ list_install_components/fast: list_install_components
 
 .PHONY : list_install_components/fast
 
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/local/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
+
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
@@ -145,14 +145,14 @@ install/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/s22100141/study_2024/Fuzz_Fshare/CMakeFiles /home/s22100141/study_2024/Fuzz_Fshare//CMakeFiles/progress.marks
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
+	cd /home/s22100141/study_2024/Fuzz_Fshare && $(CMAKE_COMMAND) -E cmake_progress_start /home/s22100141/study_2024/Fuzz_Fshare/CMakeFiles /home/s22100141/study_2024/Fuzz_Fshare/googletest/googlemock/gtest//CMakeFiles/progress.marks
+	cd /home/s22100141/study_2024/Fuzz_Fshare && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 googletest/googlemock/gtest/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/s22100141/study_2024/Fuzz_Fshare/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 clean
+	cd /home/s22100141/study_2024/Fuzz_Fshare && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 googletest/googlemock/gtest/clean
 .PHONY : clean
 
 # The main clean target
@@ -162,150 +162,102 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd /home/s22100141/study_2024/Fuzz_Fshare && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 googletest/googlemock/gtest/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd /home/s22100141/study_2024/Fuzz_Fshare && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 googletest/googlemock/gtest/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/s22100141/study_2024/Fuzz_Fshare && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-#=============================================================================
-# Target rules for targets named runTest
+# Convenience name for target.
+googletest/googlemock/gtest/CMakeFiles/gtest_main.dir/rule:
+	cd /home/s22100141/study_2024/Fuzz_Fshare && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 googletest/googlemock/gtest/CMakeFiles/gtest_main.dir/rule
+.PHONY : googletest/googlemock/gtest/CMakeFiles/gtest_main.dir/rule
 
-# Build rule for target.
-runTest: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 runTest
-.PHONY : runTest
+# Convenience name for target.
+gtest_main: googletest/googlemock/gtest/CMakeFiles/gtest_main.dir/rule
 
-# fast build rule for target.
-runTest/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runTest.dir/build.make CMakeFiles/runTest.dir/build
-.PHONY : runTest/fast
-
-#=============================================================================
-# Target rules for targets named fshared
-
-# Build rule for target.
-fshared: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 fshared
-.PHONY : fshared
-
-# fast build rule for target.
-fshared/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/fshared.dir/build.make CMakeFiles/fshared.dir/build
-.PHONY : fshared/fast
-
-#=============================================================================
-# Target rules for targets named gmock_main
-
-# Build rule for target.
-gmock_main: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gmock_main
-.PHONY : gmock_main
-
-# fast build rule for target.
-gmock_main/fast:
-	$(MAKE) $(MAKESILENT) -f googletest/googlemock/CMakeFiles/gmock_main.dir/build.make googletest/googlemock/CMakeFiles/gmock_main.dir/build
-.PHONY : gmock_main/fast
-
-#=============================================================================
-# Target rules for targets named gmock
-
-# Build rule for target.
-gmock: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gmock
-.PHONY : gmock
-
-# fast build rule for target.
-gmock/fast:
-	$(MAKE) $(MAKESILENT) -f googletest/googlemock/CMakeFiles/gmock.dir/build.make googletest/googlemock/CMakeFiles/gmock.dir/build
-.PHONY : gmock/fast
-
-#=============================================================================
-# Target rules for targets named gtest_main
-
-# Build rule for target.
-gtest_main: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gtest_main
 .PHONY : gtest_main
 
 # fast build rule for target.
 gtest_main/fast:
-	$(MAKE) $(MAKESILENT) -f googletest/googlemock/gtest/CMakeFiles/gtest_main.dir/build.make googletest/googlemock/gtest/CMakeFiles/gtest_main.dir/build
+	cd /home/s22100141/study_2024/Fuzz_Fshare && $(MAKE) $(MAKESILENT) -f googletest/googlemock/gtest/CMakeFiles/gtest_main.dir/build.make googletest/googlemock/gtest/CMakeFiles/gtest_main.dir/build
 .PHONY : gtest_main/fast
 
-#=============================================================================
-# Target rules for targets named gtest
+# Convenience name for target.
+googletest/googlemock/gtest/CMakeFiles/gtest.dir/rule:
+	cd /home/s22100141/study_2024/Fuzz_Fshare && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 googletest/googlemock/gtest/CMakeFiles/gtest.dir/rule
+.PHONY : googletest/googlemock/gtest/CMakeFiles/gtest.dir/rule
 
-# Build rule for target.
-gtest: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gtest
+# Convenience name for target.
+gtest: googletest/googlemock/gtest/CMakeFiles/gtest.dir/rule
+
 .PHONY : gtest
 
 # fast build rule for target.
 gtest/fast:
-	$(MAKE) $(MAKESILENT) -f googletest/googlemock/gtest/CMakeFiles/gtest.dir/build.make googletest/googlemock/gtest/CMakeFiles/gtest.dir/build
+	cd /home/s22100141/study_2024/Fuzz_Fshare && $(MAKE) $(MAKESILENT) -f googletest/googlemock/gtest/CMakeFiles/gtest.dir/build.make googletest/googlemock/gtest/CMakeFiles/gtest.dir/build
 .PHONY : gtest/fast
 
-libFshared/fshared.o: libFshared/fshared.c.o
+src/gtest-all.o: src/gtest-all.cc.o
 
-.PHONY : libFshared/fshared.o
-
-# target to build an object file
-libFshared/fshared.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/fshared.dir/build.make CMakeFiles/fshared.dir/libFshared/fshared.c.o
-.PHONY : libFshared/fshared.c.o
-
-libFshared/fshared.i: libFshared/fshared.c.i
-
-.PHONY : libFshared/fshared.i
-
-# target to preprocess a source file
-libFshared/fshared.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/fshared.dir/build.make CMakeFiles/fshared.dir/libFshared/fshared.c.i
-.PHONY : libFshared/fshared.c.i
-
-libFshared/fshared.s: libFshared/fshared.c.s
-
-.PHONY : libFshared/fshared.s
-
-# target to generate assembly for a file
-libFshared/fshared.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/fshared.dir/build.make CMakeFiles/fshared.dir/libFshared/fshared.c.s
-.PHONY : libFshared/fshared.c.s
-
-test/fshared_test.o: test/fshared_test.cc.o
-
-.PHONY : test/fshared_test.o
+.PHONY : src/gtest-all.o
 
 # target to build an object file
-test/fshared_test.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runTest.dir/build.make CMakeFiles/runTest.dir/test/fshared_test.cc.o
-.PHONY : test/fshared_test.cc.o
+src/gtest-all.cc.o:
+	cd /home/s22100141/study_2024/Fuzz_Fshare && $(MAKE) $(MAKESILENT) -f googletest/googlemock/gtest/CMakeFiles/gtest.dir/build.make googletest/googlemock/gtest/CMakeFiles/gtest.dir/src/gtest-all.cc.o
+.PHONY : src/gtest-all.cc.o
 
-test/fshared_test.i: test/fshared_test.cc.i
+src/gtest-all.i: src/gtest-all.cc.i
 
-.PHONY : test/fshared_test.i
+.PHONY : src/gtest-all.i
 
 # target to preprocess a source file
-test/fshared_test.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runTest.dir/build.make CMakeFiles/runTest.dir/test/fshared_test.cc.i
-.PHONY : test/fshared_test.cc.i
+src/gtest-all.cc.i:
+	cd /home/s22100141/study_2024/Fuzz_Fshare && $(MAKE) $(MAKESILENT) -f googletest/googlemock/gtest/CMakeFiles/gtest.dir/build.make googletest/googlemock/gtest/CMakeFiles/gtest.dir/src/gtest-all.cc.i
+.PHONY : src/gtest-all.cc.i
 
-test/fshared_test.s: test/fshared_test.cc.s
+src/gtest-all.s: src/gtest-all.cc.s
 
-.PHONY : test/fshared_test.s
+.PHONY : src/gtest-all.s
 
 # target to generate assembly for a file
-test/fshared_test.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runTest.dir/build.make CMakeFiles/runTest.dir/test/fshared_test.cc.s
-.PHONY : test/fshared_test.cc.s
+src/gtest-all.cc.s:
+	cd /home/s22100141/study_2024/Fuzz_Fshare && $(MAKE) $(MAKESILENT) -f googletest/googlemock/gtest/CMakeFiles/gtest.dir/build.make googletest/googlemock/gtest/CMakeFiles/gtest.dir/src/gtest-all.cc.s
+.PHONY : src/gtest-all.cc.s
+
+src/gtest_main.o: src/gtest_main.cc.o
+
+.PHONY : src/gtest_main.o
+
+# target to build an object file
+src/gtest_main.cc.o:
+	cd /home/s22100141/study_2024/Fuzz_Fshare && $(MAKE) $(MAKESILENT) -f googletest/googlemock/gtest/CMakeFiles/gtest_main.dir/build.make googletest/googlemock/gtest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o
+.PHONY : src/gtest_main.cc.o
+
+src/gtest_main.i: src/gtest_main.cc.i
+
+.PHONY : src/gtest_main.i
+
+# target to preprocess a source file
+src/gtest_main.cc.i:
+	cd /home/s22100141/study_2024/Fuzz_Fshare && $(MAKE) $(MAKESILENT) -f googletest/googlemock/gtest/CMakeFiles/gtest_main.dir/build.make googletest/googlemock/gtest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.i
+.PHONY : src/gtest_main.cc.i
+
+src/gtest_main.s: src/gtest_main.cc.s
+
+.PHONY : src/gtest_main.s
+
+# target to generate assembly for a file
+src/gtest_main.cc.s:
+	cd /home/s22100141/study_2024/Fuzz_Fshare && $(MAKE) $(MAKESILENT) -f googletest/googlemock/gtest/CMakeFiles/gtest_main.dir/build.make googletest/googlemock/gtest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.s
+.PHONY : src/gtest_main.cc.s
 
 # Help Target
 help:
@@ -319,18 +271,14 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... fshared"
-	@echo "... gmock"
-	@echo "... gmock_main"
 	@echo "... gtest"
 	@echo "... gtest_main"
-	@echo "... runTest"
-	@echo "... libFshared/fshared.o"
-	@echo "... libFshared/fshared.i"
-	@echo "... libFshared/fshared.s"
-	@echo "... test/fshared_test.o"
-	@echo "... test/fshared_test.i"
-	@echo "... test/fshared_test.s"
+	@echo "... src/gtest-all.o"
+	@echo "... src/gtest-all.i"
+	@echo "... src/gtest-all.s"
+	@echo "... src/gtest_main.o"
+	@echo "... src/gtest_main.i"
+	@echo "... src/gtest_main.s"
 .PHONY : help
 
 
@@ -342,6 +290,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/s22100141/study_2024/Fuzz_Fshare && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

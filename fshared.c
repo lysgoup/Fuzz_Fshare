@@ -24,31 +24,13 @@
 #include <sys/stat.h>
 #include <libgen.h>
 #include <errno.h>
-
-typedef enum {
-    list,
-    get,
-    put,
-    N_cmd
-} cmd ;
+#include "fshared.h"
 
 char * cmd_str[N_cmd] = {
 	"list",
     "get",
     "put"
 } ;
-
-typedef struct {
-    cmd command ;
-    int src_path_len ;
-    int des_path_len ;
-    int payload_size ;
-} client_header ;
-
-typedef struct {
-    int is_error ; // on success 0, on error 1
-    int payload_size ;
-} server_header ;
 
 char * recv_payload = 0x0 ;
 char * send_payload = 0x0 ;
@@ -381,6 +363,7 @@ go_thread(void * arg)
     return NULL;
 }
 
+#ifdef TEST
 int
 main(int argc, char * argv[])
 {
@@ -428,3 +411,4 @@ main(int argc, char * argv[])
 
     return 0 ;
 }
+#endif

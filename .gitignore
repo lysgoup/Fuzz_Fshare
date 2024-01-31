@@ -2,3 +2,11 @@
 *dir*
 fshare
 fshared
+.CMakeFiles
+googletest
+cmake_install.cmake
+CMakeCache.txt
+CMakeLists.txt
+libfshare.a
+libfshared.a
+runTest

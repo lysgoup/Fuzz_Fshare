@@ -1,3 +1,7 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef FSHARE_H
 #define FSHARE_H
 
@@ -34,7 +38,7 @@ extern char * dest_dir ;
 extern const int buf_size ;
 
 int send_bytes(int fd, char * buf, size_t len);
-cmd get_cmd_code (char * s);
+cmd get_cmd_code(char * s);
 void print_usage();
 void get_option(int argc, char * argv[]);
 char *parse_directory(char * toparse);
@@ -45,4 +49,7 @@ void receive_get_response(int sock_fd);
 void receive_put_response(int sock_fd) ;
 void receive_response(int sock_fd);
 
+#endif
+#ifdef __cplusplus
+}
 #endif

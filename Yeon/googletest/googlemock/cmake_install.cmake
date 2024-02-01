@@ -1,4 +1,4 @@
-# Install script for directory: /home/s22100141/study_2024/Fuzz_Fshare/googletest/googlemock
+# Install script for directory: /home/s22100141/study_2024/Fuzz_Fshare/Yeon/googletest/googlemock
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -43,20 +43,20 @@ if(NOT DEFINED CMAKE_OBJDUMP)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/s22100141/study_2024/Fuzz_Fshare/googletest/googlemock/libgmock.a")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/s22100141/study_2024/Fuzz_Fshare/Yeon/googletest/googlemock/libgmock.a")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/s22100141/study_2024/Fuzz_Fshare/googletest/googlemock/libgmock_main.a")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/s22100141/study_2024/Fuzz_Fshare/Yeon/googletest/googlemock/libgmock_main.a")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/s22100141/study_2024/Fuzz_Fshare/googletest/googlemock/include/gmock")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/s22100141/study_2024/Fuzz_Fshare/Yeon/googletest/googlemock/include/gmock")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/s22100141/study_2024/Fuzz_Fshare/googletest/googlemock/gtest/cmake_install.cmake")
+  include("/home/s22100141/study_2024/Fuzz_Fshare/Yeon/googletest/googlemock/gtest/cmake_install.cmake")
 
 endif()
 

@@ -2,8 +2,8 @@
 extern "C" {
 #endif
 
-#ifndef FSHARE_H
-#define FSHARE_H
+#ifndef FSHARED_H
+#define FSHARED_H
 
 typedef enum {
     list,
@@ -30,24 +30,21 @@ extern char * send_payload;
 extern client_header ch ;
 extern server_header sh ;
 
-extern char * hostip;
 extern int port_num;
-extern char * file_path;
-extern char * dest_dir ;
+extern char * server_dir;
 
-extern const int buf_size ;
+extern const int buf_size;
 
 int send_bytes(int fd, char * buf, size_t len);
-cmd get_cmd_code(char * s);
+int directory_check(char * filepath);
 void print_usage();
 void get_option(int argc, char * argv[]);
+void list_response(char * filepath, const int conn);
 char *parse_directory(char * toparse);
-void request(const int sock_fd);
-void receive_list_response(int sock_fd);
-void make_directory(char * towrite) ;
-void receive_get_response(int sock_fd);
-void receive_put_response(int sock_fd) ;
-void receive_response(int sock_fd);
+void get_response(int conn);
+void make_directory(char * towrite);
+void put_response(int conn);
+void *go_thread(void * arg);
 
 #endif
 #ifdef __cplusplus

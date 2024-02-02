@@ -5,6 +5,8 @@ extern "C" {
 #ifndef FSHARE_H
 #define FSHARE_H
 
+extern int test_int;
+
 typedef enum {
     list,
     get,

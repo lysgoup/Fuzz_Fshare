@@ -30,6 +30,8 @@
 #include <errno.h>
 #include "fshare.h"
 
+int test_int = 1;
+
 char * cmd_str[N_cmd] = {
 	"list",
     "get",
@@ -98,6 +100,7 @@ get_option(int argc, char * argv[])
     // fshare 192.168.0.1:8080 put hi.txt
     int option ;
     while ((option = getopt(argc, argv, "h")) != -1) { 
+        printf("here\n");
         switch (option) {
             case 'h':
                 print_usage() ;
@@ -112,7 +115,7 @@ get_option(int argc, char * argv[])
         print_usage();
         return;
     }
-
+    
     // extract IP address and port from <host-ip:port-number>
     char * host_port = argv[optind] ; 
     char * colon_ptr = strchr(host_port, ':') ; // find the position of the colon
@@ -132,7 +135,6 @@ get_option(int argc, char * argv[])
         fprintf(stderr, "Range of port number should be [1024, 49150]\n") ;
         return ;
     }
-    
     // get and set user-command
     char * user_command = argv[optind + 1] ; 
     if ((ch.command = get_cmd_code(user_command)) == N_cmd) { // set command on the header
@@ -157,7 +159,7 @@ get_option(int argc, char * argv[])
         strcpy(dest_dir, argv[optind + 3]) ;
         dest_dir[strlen(argv[optind + 3])] = '\0' ;
     }
-
+    
     // check if options were provided
     if (hostip == NULL || port_num == -1 || user_command == NULL) {
         print_usage() ;
@@ -277,11 +279,11 @@ receive_list_response(int sock_fd)
             if (received == 0) {
                 continue ;
             }
-            perror("receive error : ") ;
+            perror("receive error") ;
             return ;
         }
         if (sh.is_error != 0) {
-            perror("response error : ") ;
+            perror("response error") ;
             return ;
         }
         
@@ -290,7 +292,7 @@ receive_list_response(int sock_fd)
 
         if (sh.payload_size <= buf_size) {
             if ((received = recv(sock_fd, buf, sh.payload_size, 0)) != sh.payload_size) {
-                perror("receive error 2 : ") ;
+                perror("receive error 2") ;
                 return ;
             }
             buf[sh.payload_size] = '\0' ;
@@ -352,20 +354,16 @@ receive_get_response(int sock_fd)
         perror("response error : ") ;
         return ;
     }
-    
     int file_len = strlen(dest_dir) + 1 + strlen(basename(file_path)) + 1 ;
     char * file_towrite = (char *) malloc(file_len) ;
     snprintf(file_towrite, file_len, "%s/%s", dest_dir, basename(file_path)) ;
-
     make_directory(file_towrite) ;
-
     FILE * fp = fopen(file_towrite, "wb") ;
     if (fp == NULL) {
         fprintf(stderr, "Failed to open a file %s!\n", file_towrite) ;
         free(file_towrite) ;
         return ;
     }
-
     char buf[buf_size] ;
     while ((received = recv(sock_fd, buf, buf_size, 0)) > 0) {
         if (fwrite(buf, 1, received, fp) < 0) {

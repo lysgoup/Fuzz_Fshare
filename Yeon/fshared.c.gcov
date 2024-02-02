@@ -1,8 +1,9 @@
-        -:    0:Source:/home/s22100141/study_2024/Fuzz_Fshare/libFshared/fshared.c
-        -:    0:Graph:CMakeFiles/fshared.dir/libFshared/fshared.c.gcno
-        -:    0:Data:CMakeFiles/fshared.dir/libFshared/fshared.c.gcda
+        -:    0:Source:/home/s22100141/study_2024/Fuzz_Fshare/Yeon/libFshared/fshared.c
+        -:    0:Graph:./CMakeFiles/fshared.dir/libFshared/fshared.c.gcno
+        -:    0:Data:./CMakeFiles/fshared.dir/libFshared/fshared.c.gcda
         -:    0:Runs:1
         -:    0:Programs:1
+        -:    0:Source is newer than graph
         -:    1:/*  Server : receive request from the client and response back
         -:    2:    $ ./fshared -p 8080 -d files
         -:    3:    
@@ -32,574 +33,561 @@
         -:   27:
         -:   28:#include "fshared.h"
         -:   29:
-        -:   30:typedef enum {
-        -:   31:    list,
-        -:   32:    get,
-        -:   33:    put,
-        -:   34:    N_cmd
-        -:   35:} cmd ;
-        -:   36:
-        -:   37:char * cmd_str[N_cmd] = {
-        -:   38:	"list",
-        -:   39:    "get",
-        -:   40:    "put"
-        -:   41:} ;
-        -:   42:
-        -:   43:typedef struct {
-        -:   44:    cmd command ;
-        -:   45:    int src_path_len ;
-        -:   46:    int des_path_len ;
-        -:   47:    int payload_size ;
-        -:   48:} client_header ;
-        -:   49:
-        -:   50:typedef struct {
-        -:   51:    int is_error ; // on success 0, on error 1
-        -:   52:    int payload_size ;
-        -:   53:} server_header ;
-        -:   54:
-        -:   55:char * recv_payload = 0x0 ;
-        -:   56:char * send_payload = 0x0 ;
-        -:   57:
-        -:   58:client_header ch ;
-        -:   59:server_header sh ;
-        -:   60:
-        -:   61:int port_num = -1 ;
-        -:   62:char * server_dir = 0x0 ;
-        -:   63:
-        -:   64:const int buf_size = 512 ;
-        -:   65:
-        -:   66:/* 
-        -:   67:   send_bytes
-        -:   68:        return 0 if all given bytes are successfully sent
-        -:   69:        return 1 otherwise
-        -:   70:*/
-        -:   71:
-        -:   72:int 
+        -:   30:char * cmd_str[N_cmd] = {
+        -:   31:	"list",
+        -:   32:    "get",
+        -:   33:    "put"
+        -:   34:};
+        -:   35:
+        -:   36:char * recv_payload = 0x0 ;
+        -:   37:char * send_payload = 0x0 ;
+        -:   38:
+        -:   39:client_header ch ;
+        -:   40:server_header sh ;
+        -:   41:
+        -:   42:int port_num = -1 ;
+        -:   43:char * server_dir = 0x0 ;
+        -:   44:
+        -:   45:const int buf_size = 512 ;
+        -:   46:
+        -:   47:/* 
+        -:   48:   send_bytes
+        -:   49:        return 0 if all given bytes are successfully sent
+        -:   50:        return 1 otherwise
+        -:   51:*/
+        -:   52:
+        -:   53:int 
 function send_bytes called 0 returned 0% blocks executed 0%
-    #####:   73:send_bytes(int fd, char * buf, size_t len)
-        -:   74:{
-    #####:   75:    char * p = buf ;
-    #####:   76:    size_t acc = 0 ;
-        -:   77:
-    #####:   78:    while (acc < len)
+    #####:   54:send_bytes(int fd, char * buf, size_t len)
+        -:   55:{
+    #####:   56:    char * p = buf ;
+    #####:   57:    size_t acc = 0 ;
+        -:   58:
+    #####:   59:    while (acc < len)
 branch  0 never executed
 branch  1 never executed
-        -:   79:    {
-        -:   80:        size_t sent ;
-    #####:   81:        sent = send(fd, p, len - acc, 0) ;
+        -:   60:    {
+        -:   61:        size_t sent ;
+    #####:   62:        sent = send(fd, p, len - acc, 0) ;
 call    0 never executed
-    #####:   82:        if (sent == -1)
+    #####:   63:        if (sent == -1)
 branch  0 never executed
 branch  1 never executed
-    #####:   83:            return 1 ;
-    #####:   84:        p += sent ;
-    #####:   85:        acc += sent ;
-        -:   86:    }
-    #####:   87:    return 0 ;
-        -:   88:}
+    #####:   64:            return 1 ;
+    #####:   65:        p += sent ;
+    #####:   66:        acc += sent ;
+        -:   67:    }
+    #####:   68:    return 0 ;
+        -:   69:}
+        -:   70:
+        -:   71:int
+function directory_check called 0 returned 0% blocks executed 0%
+    #####:   72:directory_check(char * filepath)
+        -:   73:{
+    #####:   74:    DIR * dir = opendir(filepath) ;
+call    0 never executed
+    #####:   75:    if (dir == NULL) {
+branch  0 never executed
+branch  1 never executed
+    #####:   76:        fprintf(stderr, "Directory does not exist!\n") ;
+call    0 never executed
+    #####:   77:        return EXIT_FAILURE ;
+        -:   78:    }
+    #####:   79:    closedir(dir) ;
+call    0 never executed
+        -:   80:
+    #####:   81:    return EXIT_SUCCESS ;
+        -:   82:}
+        -:   83:
+        -:   84:void 
+function print_usage called 0 returned 0% blocks executed 0%
+    #####:   85:print_usage() 
+        -:   86:{
+    #####:   87:    printf("Usage: ./fshared -p <port-number> -d <directory-to-be-shared>\n");
+call    0 never executed
+    #####:   88:}
         -:   89:
-        -:   90:int
-function directory_check called 1 returned 100% blocks executed 71%
-        1:   91:directory_check(char * filepath)
+        -:   90:void
+function get_option called 0 returned 0% blocks executed 0%
+    #####:   91:get_option(int argc, char * argv[])
         -:   92:{
-        1:   93:    DIR * dir = opendir(filepath) ;
+        -:   93:    // -p : port number
+        -:   94:    // -d : directory to share with the client
+        -:   95:
+        -:   96:    int option ;
+    #####:   97:    while ((option = getopt(argc, argv, "p:d:")) != -1) { // Fix the condition here
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:   98:        switch (option) {
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:   99:            case 'p':
+    #####:  100:                port_num = atoi(optarg) ;
+    #####:  101:                if(port_num < 1023 || port_num > 49151) {
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  102:                    fprintf(stderr, "Range of port number should be [1024, 49150]\n") ;
+call    0 never executed
+    #####:  103:                    return ;
+        -:  104:                }
+    #####:  105:                break ;
+    #####:  106:            case 'd':
+    #####:  107:                server_dir = optarg ;
+    #####:  108:                if ((directory_check(server_dir))) {
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  109:                    fprintf(stderr, "Given directory does not exist.\n") ;
+call    0 never executed
+    #####:  110:                    return ;
+        -:  111:                }
+    #####:  112:                break ;
+    #####:  113:            case '?':
+    #####:  114:                if (optopt == 'p') {
+branch  0 never executed
+branch  1 never executed
+    #####:  115:                    fprintf(stderr, "Option '-p' requires a port number.\n") ;
+call    0 never executed
+    #####:  116:                } else if (optopt == 'd') {
+branch  0 never executed
+branch  1 never executed
+    #####:  117:                    fprintf(stderr, "Option '-d' requires a directory name.\n") ;
+call    0 never executed
+        -:  118:                } else {
+    #####:  119:                    fprintf(stderr, "Unknown option -%c.\n", optopt) ;
+call    0 never executed
+        -:  120:                }
+    #####:  121:                print_usage() ;
+call    0 never executed
+    #####:  122:                return ;
+        -:  123:        }
+        -:  124:    }
+        -:  125:
+        -:  126:    // Check if both options were provided
+    #####:  127:    if (port_num == -1 || server_dir == NULL) {
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  128:        print_usage() ;
+call    0 never executed
+    #####:  129:        return ;
+        -:  130:    }
+        -:  131:
+    #####:  132:    return ;
+        -:  133:}
+        -:  134:
+        -:  135:void
+function list_response called 0 returned 0% blocks executed 0%
+    #####:  136:list_response(char * filepath, const int conn) 
+        -:  137:{
+    #####:  138:    printf("im list_response\n");
+call    0 never executed
+    #####:  139:    DIR * dir = opendir(filepath) ;
+call    0 never executed
+    #####:  140:    if (dir == NULL) { 
+branch  0 never executed
+branch  1 never executed
+    #####:  141:        fprintf(stderr, "Failed to open a directory %s!\n", filepath) ;
+call    0 never executed
+    #####:  142:        return ;
+        -:  143:    }
+        -:  144:    struct dirent * entry ;
+    #####:  145:    while ((entry = readdir(dir)) != NULL) {
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  146:        int len = strlen(filepath) + 1 + strlen(entry->d_name) + 1 ;
+    #####:  147:        char * local_filepath = (char *) malloc(len) ;
+    #####:  148:        if (local_filepath == NULL) {
+branch  0 never executed
+branch  1 never executed
+    #####:  149:            fprintf(stderr, "Failed to allocate a memory!\n") ;
+call    0 never executed
+    #####:  150:            closedir(dir) ;
+call    0 never executed
+    #####:  151:            return ;
+        -:  152:        }
+    #####:  153:        snprintf(local_filepath, len, "%s/%s", filepath, entry->d_name) ;
+        -:  154:        // local_filepath[len] = '\0' ;
+        -:  155:
+        -:  156:        struct stat filestat ;
+    #####:  157:        if (lstat(local_filepath, &filestat) == -1) {
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  158:            fprintf(stderr, "Failed to get a file status of %s!\n", local_filepath) ;
+call    0 never executed
+    #####:  159:            free(local_filepath) ;
+    #####:  160:            closedir(dir) ;
+call    0 never executed
+    #####:  161:            return ;
+        -:  162:        }
+    #####:  163:        int sent = 0 ;
+    #####:  164:        if (S_ISREG(filestat.st_mode)) {
+branch  0 never executed
+branch  1 never executed
+    #####:  165:            sh.is_error = 0 ;
+    #####:  166:            sh.payload_size = len ;
+        -:  167:            
+    #####:  168:            if ((sent = send(conn, &sh, sizeof(sh), 0)) != sizeof(sh)) { // send header
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  169:                perror("send error : ") ;
+call    0 never executed
+    #####:  170:                free(local_filepath) ;
+    #####:  171:                closedir(dir) ;
+call    0 never executed
+    #####:  172:                return ;
+        -:  173:            }
+    #####:  174:            if ((sent = send(conn, local_filepath, len, 0)) != len) { // send payload
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  175:                perror("send error : ") ;
+call    0 never executed
+    #####:  176:                free(local_filepath) ;
+    #####:  177:                closedir(dir) ;
+call    0 never executed
+    #####:  178:                return ;
+        -:  179:            }
+    #####:  180:        } else if (S_ISDIR(filestat.st_mode)) {
+branch  0 never executed
+branch  1 never executed
+    #####:  181:            if (strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  182:                list_response(local_filepath, conn) ;
+call    0 never executed
+        -:  183:            }
+        -:  184:        } 
+        -:  185:
+    #####:  186:        free(local_filepath) ;
+        -:  187:    }
+        -:  188:
+    #####:  189:    closedir(dir) ;
+call    0 never executed
+        -:  190:}
+        -:  191:
+        -:  192:char *
+function parse_directory called 0 returned 0% blocks executed 0%
+    #####:  193:parse_directory(char * toparse) {
+    #####:  194:    char * parsed_dir = dirname(toparse) ;
+call    0 never executed
+    #####:  195:    return parsed_dir ;
+        -:  196:}
+        -:  197:
+        -:  198:void
+function get_response called 1 returned 100% blocks executed 60%
+        1:  199:get_response(int conn) 
+        1:  200:{
+        1:  201:    recv_payload = (char *) malloc(ch.payload_size) ;
 call    0 returned 100%
-        1:   94:    if (dir == NULL) {
+        1:  202:    int received ;
+call    0 returned 100%
+        1:  203:    if ((received = recv(conn, recv_payload, ch.payload_size, 0)) != ch.payload_size) {
+        -:  204:        perror("receive error : ") ;
+        1:  205:        return ;
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+    #####:  206:    }    
+call    0 never executed
+    #####:  207:    
+        -:  208:    struct stat filestat ;
+        -:  209:    if (lstat(recv_payload, &filestat) == -1) {
+        -:  210:        fprintf(stderr, "Failed to get a file status of %s!\n", recv_payload) ;
+        1:  211:        free(recv_payload) ;
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+    #####:  212:        return ;
+call    0 never executed
+    #####:  213:    }
+    #####:  214:
+        -:  215:    sh.is_error = 0 ;
+        -:  216:    sh.payload_size = filestat.st_size ;
+        1:  217:
+        1:  218:    int sent ;
+        -:  219:    if ((sent = send(conn, &sh, sizeof(sh), 0)) != sizeof(sh)) { // send server header
+        -:  220:        perror("send error 1 : ") ;
+        1:  221:        return ;
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+    #####:  222:    }
+call    0 never executed
+    #####:  223:
+        -:  224:    // 파일 열어서 읽고, 그 내용을 send
+        -:  225:    FILE * fp = fopen(recv_payload, "rb") ;
+        -:  226:    if (fp == NULL) {
+        1:  227:        fprintf(stderr, "Failed to open a file %s!\n", recv_payload) ;
+call    0 returned 100%
+        1:  228:        free(recv_payload) ;
 branch  0 taken 0% (fallthrough)
 branch  1 taken 100%
-    #####:   95:        fprintf(stderr, "Directory does not exist!\n") ;
+    #####:  229:        return ;
 call    0 never executed
-    #####:   96:        return EXIT_FAILURE ;
-        -:   97:    }
-        1:   98:    closedir(dir) ;
+    #####:  230:    }
+    #####:  231:    free(recv_payload) ;
+        -:  232:
+        1:  233:    char buf[buf_size] ;
+        -:  234:    int read_size ;
+        1:  235:    while ((read_size = fread(buf, 1, buf_size, fp)) > 0) { // send payload
+        -:  236:        if ((sent = send(conn, buf, read_size, 0)) != read_size) {
+        3:  237:            perror("send error 2 : ") ;
 call    0 returned 100%
-        -:   99:
-        1:  100:    return EXIT_SUCCESS ;
-        -:  101:}
-        -:  102:
-        -:  103:void 
-function print_usage called 0 returned 0% blocks executed 0%
-    #####:  104:print_usage() 
-        -:  105:{
-    #####:  106:    printf("Usage: ./fshared -p <port-number> -d <directory-to-be-shared>\n");
+branch  1 taken 50%
+branch  2 taken 50% (fallthrough)
+        1:  238:            fclose(fp) ;
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+    #####:  239:            return ;
 call    0 never executed
-    #####:  107:}
-        -:  108:
-        -:  109:void
-function get_option called 0 returned 0% blocks executed 0%
-    #####:  110:get_option(int argc, char * argv[])
-        -:  111:{
-        -:  112:    // -p : port number
-        -:  113:    // -d : directory to share with the client
-        -:  114:
-        -:  115:    int option ;
-    #####:  116:    while ((option = getopt(argc, argv, "p:d:")) != -1) { // Fix the condition here
+    #####:  240:        }
 call    0 never executed
-branch  1 never executed
-branch  2 never executed
-    #####:  117:        switch (option) {
-branch  0 never executed
-branch  1 never executed
-branch  2 never executed
-branch  3 never executed
-    #####:  118:            case 'p':
-    #####:  119:                port_num = atoi(optarg) ;
-    #####:  120:                if(port_num < 1023 || port_num > 49151) {
-branch  0 never executed
-branch  1 never executed
-branch  2 never executed
-branch  3 never executed
-    #####:  121:                    fprintf(stderr, "Range of port number should be [1024, 49150]\n") ;
-call    0 never executed
-    #####:  122:                    return ;
-        -:  123:                }
-    #####:  124:                break ;
-    #####:  125:            case 'd':
-    #####:  126:                server_dir = optarg ;
-    #####:  127:                if ((directory_check(server_dir))) {
-call    0 never executed
-branch  1 never executed
-branch  2 never executed
-    #####:  128:                    fprintf(stderr, "Given directory does not exist.\n") ;
-call    0 never executed
-    #####:  129:                    return ;
-        -:  130:                }
-    #####:  131:                break ;
-    #####:  132:            case '?':
-    #####:  133:                if (optopt == 'p') {
-branch  0 never executed
-branch  1 never executed
-    #####:  134:                    fprintf(stderr, "Option '-p' requires a port number.\n") ;
-call    0 never executed
-    #####:  135:                } else if (optopt == 'd') {
-branch  0 never executed
-branch  1 never executed
-    #####:  136:                    fprintf(stderr, "Option '-d' requires a directory name.\n") ;
-call    0 never executed
-        -:  137:                } else {
-    #####:  138:                    fprintf(stderr, "Unknown option -%c.\n", optopt) ;
-call    0 never executed
-        -:  139:                }
-    #####:  140:                print_usage() ;
-call    0 never executed
-    #####:  141:                return ;
-        -:  142:        }
-        -:  143:    }
-        -:  144:
-        -:  145:    // Check if both options were provided
-    #####:  146:    if (port_num == -1 || server_dir == NULL) {
-branch  0 never executed
-branch  1 never executed
-branch  2 never executed
-branch  3 never executed
-    #####:  147:        print_usage() ;
-call    0 never executed
-    #####:  148:        return ;
-        -:  149:    }
-        -:  150:
-    #####:  151:    return ;
-        -:  152:}
-        -:  153:
-        -:  154:void
-function list_response called 0 returned 0% blocks executed 0%
-    #####:  155:list_response(char * filepath, const int conn) 
-        -:  156:{
-    #####:  157:    DIR * dir = opendir(filepath) ;
-call    0 never executed
-    #####:  158:    if (dir == NULL) { 
-branch  0 never executed
-branch  1 never executed
-    #####:  159:        fprintf(stderr, "Failed to open a directory %s!\n", filepath) ;
-call    0 never executed
-    #####:  160:        return ;
-        -:  161:    }
-        -:  162:
-        -:  163:    struct dirent * entry ;
-    #####:  164:    while ((entry = readdir(dir)) != NULL) {
-call    0 never executed
-branch  1 never executed
-branch  2 never executed
-    #####:  165:        int len = strlen(filepath) + 1 + strlen(entry->d_name) + 1 ;
-    #####:  166:        char * local_filepath = (char *) malloc(len) ;
-    #####:  167:        if (local_filepath == NULL) {
-branch  0 never executed
-branch  1 never executed
-    #####:  168:            fprintf(stderr, "Failed to allocate a memory!\n") ;
-call    0 never executed
-    #####:  169:            closedir(dir) ;
-call    0 never executed
-    #####:  170:            return ;
-        -:  171:        }
-    #####:  172:        snprintf(local_filepath, len, "%s/%s", filepath, entry->d_name) ;
-        -:  173:        // local_filepath[len] = '\0' ;
-        -:  174:
-        -:  175:        struct stat filestat ;
-    #####:  176:        if (lstat(local_filepath, &filestat) == -1) {
-call    0 never executed
-branch  1 never executed
-branch  2 never executed
-    #####:  177:            fprintf(stderr, "Failed to get a file status of %s!\n", local_filepath) ;
-call    0 never executed
-    #####:  178:            free(local_filepath) ;
-    #####:  179:            closedir(dir) ;
-call    0 never executed
-    #####:  180:            return ;
-        -:  181:        }
-        -:  182:
-    #####:  183:        int sent = 0 ;
-    #####:  184:        if (S_ISREG(filestat.st_mode)) {
-branch  0 never executed
-branch  1 never executed
-    #####:  185:            sh.is_error = 0 ;
-    #####:  186:            sh.payload_size = len ;
-    #####:  187:            if ((sent = send(conn, &sh, sizeof(sh), 0)) != sizeof(sh)) { // send header
-call    0 never executed
-branch  1 never executed
-branch  2 never executed
-    #####:  188:                perror("send error : ") ;
-call    0 never executed
-    #####:  189:                free(local_filepath) ;
-    #####:  190:                closedir(dir) ;
-call    0 never executed
-    #####:  191:                return ;
-        -:  192:            }
-    #####:  193:            if ((sent = send(conn, local_filepath, len, 0)) != len) { // send payload
-call    0 never executed
-branch  1 never executed
-branch  2 never executed
-    #####:  194:                perror("send error : ") ;
-call    0 never executed
-    #####:  195:                free(local_filepath) ;
-    #####:  196:                closedir(dir) ;
-call    0 never executed
-    #####:  197:                return ;
-        -:  198:            }
-    #####:  199:        } else if (S_ISDIR(filestat.st_mode)) {
-branch  0 never executed
-branch  1 never executed
-    #####:  200:            if (strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
-branch  0 never executed
-branch  1 never executed
-branch  2 never executed
-branch  3 never executed
-    #####:  201:                list_response(local_filepath, conn) ;
-call    0 never executed
-        -:  202:            }
-        -:  203:        } 
-        -:  204:
-    #####:  205:        free(local_filepath) ;
-        -:  206:    }
-        -:  207:
-    #####:  208:    closedir(dir) ;
-call    0 never executed
-        -:  209:}
-        -:  210:
-        -:  211:char *
-function parse_directory called 0 returned 0% blocks executed 0%
-    #####:  212:parse_directory(char * toparse) {
-    #####:  213:    char * parsed_dir = dirname(toparse) ;
-call    0 never executed
-    #####:  214:    return parsed_dir ;
-        -:  215:}
-        -:  216:
-        -:  217:void
-function get_response called 0 returned 0% blocks executed 0%
-    #####:  218:get_response(int conn) 
-    #####:  219:{
-    #####:  220:    recv_payload = (char *) malloc(ch.payload_size) ;
-        -:  221:    int received ;
-    #####:  222:    if ((received = recv(conn, recv_payload, ch.payload_size, 0)) != ch.payload_size) {
-call    0 never executed
-branch  1 never executed
-branch  2 never executed
-    #####:  223:        perror("receive error : ") ;
-call    0 never executed
-    #####:  224:        return ;
-        -:  225:    }    
-        -:  226:    
-        -:  227:    struct stat filestat ;
-    #####:  228:    if (lstat(recv_payload, &filestat) == -1) {
-call    0 never executed
-branch  1 never executed
-branch  2 never executed
-    #####:  229:        fprintf(stderr, "Failed to get a file status of %s!\n", recv_payload) ;
-call    0 never executed
-    #####:  230:        free(recv_payload) ;
-    #####:  231:        return ;
-        -:  232:    }
-        -:  233:
-    #####:  234:    sh.is_error = 0 ;
-    #####:  235:    sh.payload_size = filestat.st_size ;
-        -:  236:
-        -:  237:    int sent ;
-    #####:  238:    if ((sent = send(conn, &sh, sizeof(sh), 0)) != sizeof(sh)) { // send server header
-call    0 never executed
-branch  1 never executed
-branch  2 never executed
-    #####:  239:        perror("send error 1 : ") ;
-call    0 never executed
-    #####:  240:        return ;
-        -:  241:    }
-        -:  242:
-        -:  243:    // 파일 열어서 읽고, 그 내용을 send
-    #####:  244:    FILE * fp = fopen(recv_payload, "rb") ;
-call    0 never executed
-    #####:  245:    if (fp == NULL) {
-branch  0 never executed
-branch  1 never executed
-    #####:  246:        fprintf(stderr, "Failed to open a file %s!\n", recv_payload) ;
-call    0 never executed
-    #####:  247:        free(recv_payload) ;
-    #####:  248:        return ;
-        -:  249:    }
-    #####:  250:    free(recv_payload) ;
-        -:  251:
-    #####:  252:    char buf[buf_size] ;
-        -:  253:    int read_size ;
-    #####:  254:    while ((read_size = fread(buf, 1, buf_size, fp)) > 0) { // send payload
-call    0 never executed
-branch  1 never executed
-branch  2 never executed
-    #####:  255:        if ((sent = send(conn, buf, read_size, 0)) != read_size) {
-call    0 never executed
-branch  1 never executed
-branch  2 never executed
-    #####:  256:            perror("send error 2 : ") ;
-call    0 never executed
-    #####:  257:            fclose(fp) ;
-call    0 never executed
-    #####:  258:            return ;
-        -:  259:        }
-        -:  260:    }
-        -:  261:
-    #####:  262:    fclose(fp) ;
-call    0 never executed
-        -:  263:}
-        -:  264:
-        -:  265:void
+    #####:  241:    }
+        -:  242:    
+        -:  243:    fclose(fp) ;
+        -:  244:}
+        1:  245:
+call    0 returned 100%
+        -:  246:void
+        -:  247:make_directory(char * towrite) 
+        -:  248:{
 function make_directory called 0 returned 0% blocks executed 0%
-    #####:  266:make_directory(char * towrite) 
-        -:  267:{
-    #####:  268:    char * temp = (char *) malloc(strlen(towrite) + 1) ;
-        -:  269:
-    #####:  270:    for (int i = 0; i <= strlen(towrite); i++) {
+    #####:  249:    char * temp = (char *) malloc(strlen(towrite) + 1) ;
+        -:  250:
+    #####:  251:    for (int i = 0; i <= strlen(towrite); i++) {
+        -:  252:        if (towrite[i] == '/') {
+    #####:  253:            strncpy(temp, towrite, i) ;
 branch  0 never executed
 branch  1 never executed
-    #####:  271:        if (towrite[i] == '/') {
+    #####:  254:            temp[i] = '\0' ;
 branch  0 never executed
 branch  1 never executed
-    #####:  272:            strncpy(temp, towrite, i) ;
-    #####:  273:            temp[i] = '\0' ;
-        -:  274:
-    #####:  275:            DIR * dir = opendir(temp) ;
+    #####:  255:
+    #####:  256:            DIR * dir = opendir(temp) ;
+        -:  257:            if (dir) { // if a directory exists
+    #####:  258:                closedir(dir) ;
 call    0 never executed
-    #####:  276:            if (dir) { // if a directory exists
+    #####:  259:            } 
 branch  0 never executed
 branch  1 never executed
-    #####:  277:                closedir(dir) ;
+    #####:  260:            else if (errno == ENOENT) { // if a directory does not exist
 call    0 never executed
-    #####:  278:            } else if (errno == ENOENT) { // if a directory does not exist
+        -:  261:                if (mkdir(temp, 0776) == -1) {
+    #####:  262:                    fprintf(stderr, "Failed to make a new directory %s!\n", temp) ;
 branch  0 never executed
 branch  1 never executed
-    #####:  279:                if (mkdir(temp, 0776) == -1) {
+    #####:  263:                    free(temp) ;
 call    0 never executed
 branch  1 never executed
 branch  2 never executed
-    #####:  280:                    fprintf(stderr, "Failed to make a new directory %s!\n", temp) ;
+    #####:  264:                    return ;
 call    0 never executed
-    #####:  281:                    free(temp) ;
-    #####:  282:                    return ;
-        -:  283:                }
-        -:  284:            }
-        -:  285:        }
-        -:  286:    }
-    #####:  287:    free(temp) ;
-        -:  288:}
-        -:  289:
-        -:  290:void
+    #####:  265:                }
+    #####:  266:            }
+        -:  267:        }
+        -:  268:    }
+        -:  269:    free(temp) ;
+        -:  270:}
+    #####:  271:
+        -:  272:void
+        -:  273:put_response(int conn)
+        -:  274:{
 function put_response called 0 returned 0% blocks executed 0%
-    #####:  291:put_response(int conn)
-    #####:  292:{
-        -:  293:    // source path from the payload
-    #####:  294:    recv_payload = (char *) malloc(ch.src_path_len) ;
-        -:  295:    int received ;
-    #####:  296:    if ((received = recv(conn, recv_payload, ch.src_path_len, 0)) != ch.src_path_len) {
+    #####:  275:    // source path from the payload
+    #####:  276:    recv_payload = (char *) malloc(ch.src_path_len) ;
+        -:  277:    int received ;
+    #####:  278:    if ((received = recv(conn, recv_payload, ch.src_path_len, 0)) != ch.src_path_len) {
+        -:  279:        perror("receive error source : ") ;
+    #####:  280:        free(recv_payload) ;
 call    0 never executed
 branch  1 never executed
 branch  2 never executed
-    #####:  297:        perror("receive error source : ") ;
+    #####:  281:        return ;
 call    0 never executed
-    #####:  298:        free(recv_payload) ;
-    #####:  299:        return ;
-        -:  300:    }
-    #####:  301:    char * file_name = (char *) malloc(strlen(basename(recv_payload)) + 1) ;
+    #####:  282:    }
+    #####:  283:    char * file_name = (char *) malloc(strlen(basename(recv_payload)) + 1) ;
+        -:  284:    strcpy(file_name, basename(recv_payload)) ;
+    #####:  285:    free(recv_payload) ;
 call    0 never executed
-    #####:  302:    strcpy(file_name, basename(recv_payload)) ;
+    #####:  286:
 call    0 never executed
-    #####:  303:    free(recv_payload) ;
-        -:  304:
-        -:  305:    // destination path from the payload
-    #####:  306:    recv_payload = (char *) malloc(ch.des_path_len) ;
-    #####:  307:    if ((received = recv(conn, recv_payload, ch.des_path_len, 0)) != ch.des_path_len) {
+    #####:  287:    // destination path from the payload
+        -:  288:    recv_payload = (char *) malloc(ch.des_path_len) ;
+        -:  289:    if ((received = recv(conn, recv_payload, ch.des_path_len, 0)) != ch.des_path_len) {
+    #####:  290:        perror("receive error destination : ") ;
+    #####:  291:        free(file_name) ;
 call    0 never executed
 branch  1 never executed
 branch  2 never executed
-    #####:  308:        perror("receive error destination : ") ;
+    #####:  292:        free(recv_payload) ;
 call    0 never executed
-    #####:  309:        free(file_name) ;
-    #####:  310:        free(recv_payload) ;
-    #####:  311:        return ;
-        -:  312:    }
-        -:  313:    
-    #####:  314:    int file_len = ch.des_path_len + 1 + strlen(file_name) + 1 ;
-    #####:  315:    char * file_towrite = (char *) malloc(file_len) ;
-    #####:  316:    snprintf(file_towrite, file_len, "%s/%s", recv_payload, file_name) ;
-    #####:  317:    free(file_name) ;
-    #####:  318:    free(recv_payload) ;
-        -:  319:
-    #####:  320:    printf("checking : put destination %s\n", file_towrite) ;
+    #####:  293:        return ;
+    #####:  294:    }
+    #####:  295:    
+        -:  296:    int file_len = ch.des_path_len + 1 + strlen(file_name) + 1 ;
+        -:  297:    char * file_towrite = (char *) malloc(file_len) ;
+    #####:  298:    snprintf(file_towrite, file_len, "%s/%s", recv_payload, file_name) ;
+    #####:  299:    free(file_name) ;
+    #####:  300:    free(recv_payload) ;
+    #####:  301:
+    #####:  302:    printf("checking : put destination %s\n", file_towrite) ;
+        -:  303:
+    #####:  304:    make_directory(file_towrite) ;
 call    0 never executed
-        -:  321:
-    #####:  322:    make_directory(file_towrite) ;
+        -:  305:
+    #####:  306:    FILE * fp = fopen(file_towrite, "wb") ;
 call    0 never executed
-        -:  323:
-    #####:  324:    FILE * fp = fopen(file_towrite, "wb") ;
+        -:  307:    if (fp == NULL) {
+    #####:  308:        fprintf(stderr, "Failed to open a file %s!\n", file_towrite) ;
 call    0 never executed
-    #####:  325:    if (fp == NULL) {
+    #####:  309:        free(file_towrite) ;
 branch  0 never executed
 branch  1 never executed
-    #####:  326:        fprintf(stderr, "Failed to open a file %s!\n", file_towrite) ;
+    #####:  310:        return ;
 call    0 never executed
-    #####:  327:        free(file_towrite) ;
-    #####:  328:        return ;
-        -:  329:    }
-        -:  330:
-    #####:  331:    char buf[buf_size] ;
-    #####:  332:    while ((received = recv(conn, buf, buf_size, 0)) > 0) { // receive payload
-call    0 never executed
-branch  1 never executed
-branch  2 never executed
-    #####:  333:        if (fwrite(buf, 1, received, fp) < 0) {
-call    0 never executed
-        -:  334:            fprintf(stderr, "Failed to write a file %s\n", file_towrite) ;
-        -:  335:            free(file_towrite) ;
-        -:  336:            fclose(fp) ;
-        -:  337:            return ;
-        -:  338:        }
-        -:  339:    }
-        -:  340:
-    #####:  341:    free(file_towrite) ;
-    #####:  342:    fclose(fp) ;
-call    0 never executed
-        -:  343:
-    #####:  344:    sh.is_error = 0 ;
-    #####:  345:    sh.payload_size = 0 ;
-        -:  346:
-        -:  347:    int sent ;
-    #####:  348:    if ((sent = send(conn, &sh, sizeof(sh), 0)) != sizeof(sh)) { // send server header
+    #####:  311:    }
+    #####:  312:
+        -:  313:    char buf[buf_size] ;
+        -:  314:    while ((received = recv(conn, buf, buf_size, 0)) > 0) { // receive payload
+    #####:  315:        if (fwrite(buf, 1, received, fp) < 0) {
+    #####:  316:            fprintf(stderr, "Failed to write a file %s\n", file_towrite) ;
 call    0 never executed
 branch  1 never executed
 branch  2 never executed
-    #####:  349:        perror("send error : ") ;
+    #####:  317:            free(file_towrite) ;
 call    0 never executed
-    #####:  350:        return ;
-        -:  351:    }
-        -:  352:}
-        -:  353:
-        -:  354:void *
+        -:  318:            fclose(fp) ;
+        -:  319:            return ;
+        -:  320:        }
+        -:  321:    }
+        -:  322:
+        -:  323:    free(file_towrite) ;
+        -:  324:    fclose(fp) ;
+    #####:  325:
+    #####:  326:    sh.is_error = 0 ;
+call    0 never executed
+        -:  327:    sh.payload_size = 0 ;
+    #####:  328:
+    #####:  329:    int sent ;
+        -:  330:    if ((sent = send(conn, &sh, sizeof(sh), 0)) != sizeof(sh)) { // send server header
+        -:  331:        perror("send error : ") ;
+    #####:  332:        return ;
+call    0 never executed
+branch  1 never executed
+branch  2 never executed
+    #####:  333:    }
+call    0 never executed
+    #####:  334:}
+        -:  335:
+        -:  336:void *
+        -:  337:go_thread(void * arg) 
+        -:  338:{
 function go_thread called 0 returned 0% blocks executed 0%
-    #####:  355:go_thread(void * arg) 
-    #####:  356:{
-    #####:  357:    int conn = *((int *) arg) ;
-    #####:  358:    free(arg) ;
-        -:  359:
-        -:  360:    /* Receive message from the client */
-        -:  361:
-        -:  362:    int received ;
-    #####:  363:    if ((received = recv(conn, &ch, sizeof(ch), 0)) != sizeof(ch)) { // receive client header
+    #####:  339:    int conn = *((int *) arg) ;
+    #####:  340:    free(arg) ;
+    #####:  341:
+    #####:  342:    /* Receive message from the client */
+        -:  343:
+        -:  344:    int received ;
+        -:  345:    if ((received = recv(conn, &ch, sizeof(ch), 0)) != sizeof(ch)) { // receive client header
+        -:  346:        perror("receive error : ") ;
+    #####:  347:        return NULL ;
 call    0 never executed
 branch  1 never executed
 branch  2 never executed
-    #####:  364:        perror("receive error : ") ;
+    #####:  348:    } 
 call    0 never executed
-    #####:  365:        return NULL ;
-        -:  366:    } 
-        -:  367:
-    #####:  368:    char buf[buf_size] ;
-    #####:  369:    int len = 0 ;
-    #####:  370:    if (ch.command == list) {
+    #####:  349:
+        -:  350:    char buf[buf_size] ;
+        -:  351:    int len = 0 ;
+    #####:  352:    if (ch.command == list) {
+    #####:  353:        list_response(server_dir, conn) ;
+    #####:  354:        printf(">> List response completed!\n") ;
 branch  0 never executed
 branch  1 never executed
-    #####:  371:        list_response(server_dir, conn) ;
+    #####:  355:    } else if (ch.command == get) {
 call    0 never executed
-    #####:  372:        printf(">> List response completed!\n") ;
+    #####:  356:        get_response(conn) ;
 call    0 never executed
-    #####:  373:    } else if (ch.command == get) {
+    #####:  357:        printf(">> Get response completed!\n") ;
 branch  0 never executed
 branch  1 never executed
-    #####:  374:        get_response(conn) ;
+    #####:  358:    } else if (ch.command == put) {
 call    0 never executed
-    #####:  375:        printf(">> Get response completed!\n") ;
+    #####:  359:        put_response(conn) ;
 call    0 never executed
-    #####:  376:    } else if (ch.command == put) {
+    #####:  360:        printf(">> Put response completed!\n") ;
 branch  0 never executed
 branch  1 never executed
-    #####:  377:        put_response(conn) ;
+    #####:  361:    }
 call    0 never executed
-    #####:  378:        printf(">> Put response completed!\n") ;
+    #####:  362:
 call    0 never executed
-        -:  379:    }
-        -:  380:
-    #####:  381:    shutdown(conn, SHUT_WR) ;
+        -:  363:    shutdown(conn, SHUT_WR) ;
+        -:  364:
+    #####:  365:    return NULL;
 call    0 never executed
-        -:  382:
-    #####:  383:    return NULL;
-        -:  384:}
-        -:  385:
-        -:  386:// int
-        -:  387:// main(int argc, char * argv[])
-        -:  388:// {
-        -:  389://     get_option(argc, argv) ;
-        -:  390:
-        -:  391://     /* Connect socket */
-        -:  392:
-        -:  393://     int listen_fd = socket(AF_INET, SOCK_STREAM, 0) ;
-        -:  394://     if (listen_fd == 0) {
-        -:  395://         perror("socket failed : ") ;
-        -:  396://         exit(EXIT_FAILURE) ;
-        -:  397://     }
-        -:  398:
-        -:  399://     struct sockaddr_in address ;
-        -:  400://     memset(&address, '0', sizeof(address)) ;
-        -:  401://     address.sin_family = AF_INET ;
-        -:  402://     address.sin_addr.s_addr = INADDR_ANY ; // localhost
-        -:  403://     address.sin_port = htons(port_num) ;
-        -:  404://     if (bind(listen_fd, (struct sockaddr *) &address, sizeof(address)) < 0) { 
-        -:  405://         perror("bind failed : ") ;
-        -:  406://         exit(EXIT_FAILURE) ;
-        -:  407://     }
-        -:  408:
-        -:  409://     while (1) {
-        -:  410://         if (listen(listen_fd, 16) < 0) {
-        -:  411://             perror("listen failed : ") ;
-        -:  412://             exit(EXIT_FAILURE) ; 
-        -:  413://         }
-        -:  414:
-        -:  415://         int * new_socket = (int *) malloc(sizeof(int)) ;
-        -:  416://         int address_len = sizeof(address) ;
-        -:  417://         *new_socket = accept(listen_fd, (struct sockaddr *) &address, (socklen_t *) &address_len) ;
-        -:  418://         if (*new_socket < 0) {
-        -:  419://             perror("accept failed : ") ;
-        -:  420://             exit(EXIT_FAILURE) ;
-        -:  421://         }
-        -:  422:
-        -:  423://         pthread_t working_thread ;
-        -:  424://         if (pthread_create(&working_thread, NULL, go_thread, new_socket) == 0) {
-        -:  425://             // data receiving is done in working thread
-        -:  426://         } else {
-        -:  427://             close(*new_socket) ;
-        -:  428://         }
-        -:  429://     }
-        -:  430:
-        -:  431://     return 0 ;
-        -:  432:// }
+        -:  366:}
+    #####:  367:
+        -:  368:#ifdef MAIN
+        -:  369:int
+        -:  370:main(int argc, char * argv[])
+        -:  371:{
+        -:  372:    get_option(argc, argv) ;
+        -:  373:
+        -:  374:    /* Connect socket */
+        -:  375:
+        -:  376:    int listen_fd = socket(AF_INET, SOCK_STREAM, 0) ;
+        -:  377:    if (listen_fd == 0) {
+        -:  378:        perror("socket failed : ") ;
+        -:  379:        exit(EXIT_FAILURE) ;
+        -:  380:    }
+        -:  381:
+        -:  382:    struct sockaddr_in address ;
+        -:  383:    memset(&address, '0', sizeof(address)) ;
+        -:  384:    address.sin_family = AF_INET ;
+        -:  385:    address.sin_addr.s_addr = INADDR_ANY ; // localhost
+        -:  386:    address.sin_port = htons(port_num) ;
+        -:  387:    if (bind(listen_fd, (struct sockaddr *) &address, sizeof(address)) < 0) { 
+        -:  388:        perror("bind failed : ") ;
+        -:  389:        exit(EXIT_FAILURE) ;
+        -:  390:    }
+        -:  391:
+        -:  392:    while (1) {
+        -:  393:        if (listen(listen_fd, 16) < 0) {
+        -:  394:            perror("listen failed : ") ;
+        -:  395:            exit(EXIT_FAILURE) ; 
+        -:  396:        }
+        -:  397:
+        -:  398:        int * new_socket = (int *) malloc(sizeof(int)) ;
+        -:  399:        int address_len = sizeof(address) ;
+        -:  400:        *new_socket = accept(listen_fd, (struct sockaddr *) &address, (socklen_t *) &address_len) ;
+        -:  401:        if (*new_socket < 0) {
+        -:  402:            perror("accept failed : ") ;
+        -:  403:            exit(EXIT_FAILURE) ;
+        -:  404:        }
+        -:  405:
+        -:  406:        pthread_t working_thread ;
+        -:  407:        if (pthread_create(&working_thread, NULL, go_thread, new_socket) == 0) {
+        -:  408:            // data receiving is done in working thread
+        -:  409:        } else {
+        -:  410:            close(*new_socket) ;
+        -:  411:        }
+        -:  412:    }
+        -:  413:
+        -:  414:    return 0 ;
+        -:  415:}
+        -:  416:#endif

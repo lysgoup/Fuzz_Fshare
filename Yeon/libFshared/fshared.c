@@ -135,12 +135,12 @@ get_option(int argc, char * argv[])
 void
 list_response(char * filepath, const int conn) 
 {
+    printf("im list_response\n");
     DIR * dir = opendir(filepath) ;
     if (dir == NULL) { 
         fprintf(stderr, "Failed to open a directory %s!\n", filepath) ;
         return ;
     }
-
     struct dirent * entry ;
     while ((entry = readdir(dir)) != NULL) {
         int len = strlen(filepath) + 1 + strlen(entry->d_name) + 1 ;
@@ -160,11 +160,11 @@ list_response(char * filepath, const int conn)
             closedir(dir) ;
             return ;
         }
-
         int sent = 0 ;
         if (S_ISREG(filestat.st_mode)) {
             sh.is_error = 0 ;
             sh.payload_size = len ;
+            
             if ((sent = send(conn, &sh, sizeof(sh), 0)) != sizeof(sh)) { // send header
                 perror("send error : ") ;
                 free(local_filepath) ;
@@ -239,7 +239,7 @@ get_response(int conn)
             return ;
         }
     }
-
+    
     fclose(fp) ;
 }
 

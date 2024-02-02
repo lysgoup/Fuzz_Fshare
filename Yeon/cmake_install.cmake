@@ -1,4 +1,4 @@
-# Install script for directory: /home/s22100141/study_2024/Fuzz_Fshare
+# Install script for directory: /home/s22100141/study_2024/Fuzz_Fshare/Yeon
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,7 +44,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/s22100141/study_2024/Fuzz_Fshare/googletest/googlemock/cmake_install.cmake")
+  include("/home/s22100141/study_2024/Fuzz_Fshare/Yeon/googletest/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -55,5 +55,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/s22100141/study_2024/Fuzz_Fshare/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/s22100141/study_2024/Fuzz_Fshare/Yeon/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

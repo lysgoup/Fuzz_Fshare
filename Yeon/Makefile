@@ -67,10 +67,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/s22100141/study_2024/Fuzz_Fshare
+CMAKE_SOURCE_DIR = /home/s22100141/study_2024/Fuzz_Fshare/Yeon
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/s22100141/study_2024/Fuzz_Fshare
+CMAKE_BINARY_DIR = /home/s22100141/study_2024/Fuzz_Fshare/Yeon
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -123,7 +123,7 @@ edit_cache/fast: edit_cache
 
 # Special rule for the target list_install_components
 list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"gmock\" \"gtest\""
 .PHONY : list_install_components
 
 # Special rule for the target list_install_components
@@ -145,9 +145,9 @@ install/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/s22100141/study_2024/Fuzz_Fshare/CMakeFiles /home/s22100141/study_2024/Fuzz_Fshare//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/s22100141/study_2024/Fuzz_Fshare/Yeon/CMakeFiles /home/s22100141/study_2024/Fuzz_Fshare/Yeon//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/s22100141/study_2024/Fuzz_Fshare/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/s22100141/study_2024/Fuzz_Fshare/Yeon/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -237,7 +237,7 @@ gtest_main: cmake_check_build_system
 
 # fast build rule for target.
 gtest_main/fast:
-	$(MAKE) $(MAKESILENT) -f googletest/googlemock/gtest/CMakeFiles/gtest_main.dir/build.make googletest/googlemock/gtest/CMakeFiles/gtest_main.dir/build
+	$(MAKE) $(MAKESILENT) -f googletest/googletest/CMakeFiles/gtest_main.dir/build.make googletest/googletest/CMakeFiles/gtest_main.dir/build
 .PHONY : gtest_main/fast
 
 #=============================================================================
@@ -250,7 +250,7 @@ gtest: cmake_check_build_system
 
 # fast build rule for target.
 gtest/fast:
-	$(MAKE) $(MAKESILENT) -f googletest/googlemock/gtest/CMakeFiles/gtest.dir/build.make googletest/googlemock/gtest/CMakeFiles/gtest.dir/build
+	$(MAKE) $(MAKESILENT) -f googletest/googletest/CMakeFiles/gtest.dir/build.make googletest/googletest/CMakeFiles/gtest.dir/build
 .PHONY : gtest/fast
 
 libFshared/fshared.o: libFshared/fshared.c.o

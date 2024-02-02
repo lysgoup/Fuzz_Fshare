@@ -2,14 +2,7 @@ cmake_minimum_required(VERSION 3.18)  # 자동 생성구문
 
 project(google-test)
 
-option(BUILD_GTEST "Builds the googletest subproject" ON)
-option(BUILD_GMOCK "Builds the googlemock subproject" OFF)
-
-if(BUILD_GMOCK)
-  add_subdirectory( googletest/googlemock )
-elseif(BUILD_GTEST)
-  add_subdirectory( googletest/googletest )
-endif()
+add_subdirectory( googletest )
 
 #SET(CMAKE_C_COMPILER ~/AFLplusplus/afl-gcc)
 #SET(CMAKE_CXX_COMPILER ~/AFLplusplus/afl-g++)
@@ -33,7 +26,7 @@ include_directories(libFshared)
 add_executable(runTest test/fshared_test.cc)
 target_link_libraries(runTest fshared)
 include_directories(googletest/googletest/include)
-target_link_libraries(runTest gtest gtest_main)
+target_link_libraries(runTest gtest gtest_main gmock)
 
 
 
